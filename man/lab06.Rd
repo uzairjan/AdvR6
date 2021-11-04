@@ -17,8 +17,3 @@ Useful links:
 
 \url{https://en.wikipedia.org/wiki/Knapsack_problem}
 }
-\author{
-- Farid Musayev   (gitHub:"faridmusayev", liuid:farmu437)
-- Mucahit Sahin   (gitHub:"mchtsahin", liuid:mucsa806)
-- Selen Karaduman (gitHub:"selenkaraduman", liuid:selka266)
-}
