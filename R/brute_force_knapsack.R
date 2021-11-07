@@ -1,88 +1,83 @@
-#' Brute Force Knapsack
+library(parallel)
+
+#' @title Knapsack Algorithm - Brute Force
+#' @description Brute Force Approch to Solve Knapsack Problem
 #'
-#'This algorithm estimates how to put available items into the knapsack
-#'in order to get the maximum possible value less than weight of knapsack.
-#'Here brute force approach is implemented that means all possible
-#' combinations of items O(2^n) are considered.
+#' @param x data.frame with colnames 'v' & 'w'
+#' @param W Knapsack Maximum Weight
+#' @param p Bool value to pass to active parallel
 #'
-#' @param x Data frame with two numeric columns: weights and values
-#' @param W Total weight of the knapsack
-#' @param parallel logical parameter for parallel computation
-#'
-#' @return
-#' List with numbers of items that can be put into knapsack and maximum obtained value
-#
+#' @return Return best Knapsack combination with maximum value
+#' @import parallel
+#' @importFrom utils combn
 #' @export
+#' @exportClass brute_force_knapsack
 #'
-#'
-#'
-#'
-brute_force_knapsack <- function(x,W, parallel = FALSE){
+brute_force_knapsack = setRefClass('brute_force_knapsack',
+                                   methods = list(
+       bruteForceKnapsack = function(x,W,p = FALSE){
+         if (W < 1) stop("Please Enter a correct Weight")
+         if (!is.data.frame(x)) stop("Data frame required")
+         if (!(all(colnames(x) %in% c("v","w")))) stop("Variable name in the dataframe are not named correctly")
+         getValues <- function(count) {
+           return(combn(x[,"v"], count, sum))
+         }
 
-  if(!is.data.frame(x) || W < 0){
-    stop("Wrong Input")
-  }
-  if(parallel == FALSE){
-    list_comb <- list()
-    for(j in 1:nrow(x))
-    {
-      list_comb[[j]] <- combn(rownames(x), j, paste, collapse = " ")
-    }
+         getfactors <- function(count) {
+           return(combn(rownames(x), count, function(x) getElementName(x)))
+         }
 
-    list_wght <- list()
-    for(j in 1:nrow(x))
-    {
-      list_wght[[j]] <- combn(x$w, j,sum)
-    }
+         getElementName <- function(names) {
+           return(paste(names, collapse = ","))
+         }
 
-    list_val <- list()
-    for(j in 1:nrow(x) )
-    {
-      list_val[[j]] <- combn(x$v, j, sum)
-    }
+         getWeight <- function(count) {
+           return(combn(x[,"w"], count, sum))
+         }
+         # --------- Functions for get Weights, Values and Names from Data Frame --------- #
 
-    vector_comb <- unlist(list_comb)
-    vector_wght <- unlist(list_wght)
-    vector_val <- round(unlist(list_val),0)
+         best_combination <- list()
+         best_combination[["value"]] = 0
+         best_combination[["factors"]] = 0
 
-    weights_ind_cap <- which(vector_wght < W)
-    value_vald <- vector_val[weights_ind_cap]
-    maxvalid <- max(value_vald)
+         totalWeight <- c()
+         AllValues <- c()
+         AllFactors <- c()
 
-    valid_ind_vec <- which(vector_val == maxvalid)
-    val_cmb <- vector_comb[valid_ind_vec]
+         if (p) {
+           nfCores <- parallel::detectCores()
+           clusters <- parallel::makeCluster(nfCores)
 
-    lead_comb_list <- list(value = maxvalid, elements = as.numeric(strsplit(val_cmb, " ")[[1]]))
-  }else{
+           totalWeight <- unlist(parLapplyLB(clusters, 1:nrow(x), function(y) getWeight(y)))
+           AllValues   <- unlist(parLapplyLB(clusters, 1:nrow(x), function(y) getValues(y)))
+           AllFactors  <- unlist(parLapplyLB(clusters, 1:nrow(x), function(y) getfactors(y)))
+           parallel::stopCluster(clusters)
+         } else {
+           for(item in 1:nrow(x)) {
+             setWeight   <- getWeight(item)
+             setValues  <- getValues(item)
+             setFactors <- getfactors(item)
 
-    no_of_cores <- detectCores() - 1
-    cluster <- makeCluster(no_of_cores)
-    clusterExport(cluster , c("x") ,envir = environment())
+             totalWeight <- c(totalWeight, setWeight)
+             AllValues <- c(AllValues, setValues)
+             AllFactors <- c(AllFactors, setFactors)
+           }
+         }
 
-    list_comb <- parLapplyLB(cluster, 1:nrow(x), fun =  function(y) {
-      combn(rownames(x) , y , paste0, collapse = " ")
-    })
-    list_wght <- parLapplyLB(cluster, 1:nrow(x), fun =  function(y) {
-      combn(x$w , y, sum)
-    })
-    list_val <- parLapplyLB(cluster,1:nrow(x), fun =  function(y) {
-      combn(x$v , y , sum)
-    })
+         Range <- which(totalWeight <= W)
 
-    stopCluster(cluster)
+          valid_weight <- totalWeight[Range]
+         valid_values  <- AllValues[Range]
+         valid_factors <- AllFactors[Range]
 
-    vector_comb <- unlist(list_comb)
-    vector_wght <- unlist(list_wght)
-    vector_val <- round(unlist(list_val),0)
+         max_value_element  <- which(valid_values == max(valid_values))
+         best_combination[["value"]] = round(valid_values[max_value_element], digits = 0)
+         best_combination[["factors"]] = as.numeric(unlist(strsplit(valid_factors[max_value_element], ",")))
+         return(best_combination)
+       }
+     )
+     )
 
-    weights_ind_cap <- which(vector_wght < W)
-    value_vald <- vector_val[weights_ind_cap]
-    maxvalid <- max(value_vald)
 
-    valid_ind_vec <- which(vector_val == maxvalid)
-    val_cmb <- vector_comb[valid_ind_vec]
 
-    lead_comb_list <- list(value = maxvalid, elements = as.numeric(strsplit(val_cmb, " ")[[1]]))
-  }
-  return(lead_comb_list)
-}
+

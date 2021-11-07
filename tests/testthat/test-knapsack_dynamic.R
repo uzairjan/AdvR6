@@ -8,32 +8,34 @@ knapsack_objects <- data.frame(
   v=runif(n = n, 0, 10000)
 )
 
+obj <- knapsack_dynamic()
+
 test_that("List object has correct names", {
-  expect_silent(bfk <- knapsack_dynamic(x = knapsack_objects[1:8,], W = 3500))
-  expect_named(bfk, c("value", "elements"))
+  expect_silent(bfk <- obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 3500))
+  expect_named(bfk, c("value", "factors"))
 })
 
 
 test_that(" Function inputs are wrong", {
-  expect_error(knapsack_dynamic("allmighty", 200))
-  expect_error(knapsack_dynamic(x = knapsack_objects[1:8,], W = -10000))
+  expect_error(obj$knapsackDynamic("allmighty", 200))
+  expect_error(obj$knapsackDynamic(df = knapsack_objects[1:8,], W = -10000))
 })
 
-test_that("Function is working correctly.", {
-  bfk <- knapsack_dynamic(x = knapsack_objects[1:8,], W = 3500)
+test_that("Return correct response", {
+  bfk <- obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 3500)
   expect_equal(round(bfk$value), 16770)
-  expect_true(all(round(bfk$elements) %in% c(5, 8)))
+  expect_true(all(round(bfk$factors) %in% c(5, 8)))
 
-  bfk <- knapsack_dynamic(x = knapsack_objects[1:12,], W = 3500)
+  bfk <- obj$knapsackDynamic(df = knapsack_objects[1:12,], W = 3500)
   expect_equal(round(bfk$value), 16770)
-  expect_true(all(round(bfk$elements) %in% c(5, 8)))
+  expect_true(all(round(bfk$factors) %in% c(5, 8)))
 
-  bfk <- knapsack_dynamic(x = knapsack_objects[1:8,], W = 2000)
+  bfk <- obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 2000)
   expect_equal(round(bfk$value), 15428)
-  expect_true(all(round(bfk$elements) %in% c(3, 8)))
+  expect_true(all(round(bfk$factors) %in% c(3, 8)))
 
-  bfk <- knapsack_dynamic(x = knapsack_objects[1:12,], W = 2000)
+  bfk <- obj$knapsackDynamic(df = knapsack_objects[1:12,], W = 2000)
   expect_equal(round(bfk$value), 15428)
-  expect_true(all(round(bfk$elements) %in% c(3, 8)))
+  expect_true(all(round(bfk$factors) %in% c(3, 8)))
 
 })
