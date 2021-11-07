@@ -6,12 +6,12 @@
 \alias{knapsack_dynamic}
 \title{Dynamic Knapsack}
 \arguments{
-\item{x}{Data frame with two numeric columns: weights and values}
+\item{x}{Data frame weights and values}
 
 \item{W}{Total weight of the knapsack}
 }
 \value{
-List with numbers of items that can be put into knapsack and maximum obtained value
+maximum obtained value
 }
 \description{
 This is a dynamic programming (DP) approach to solving knapsack problem.
