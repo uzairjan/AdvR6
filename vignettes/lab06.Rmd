@@ -14,6 +14,31 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r echo=FALSE}
+
+#evtools::install_github("uzairjan/AdvR6")
 library(lab06)
+
+## basic example code
+
+
+n <- 2000
+knapsack_objects <- data.frame(
+  w=sample(1:4000, size = n, replace = TRUE),
+  v=runif(n = n, 0, 10000)
+)
+# dynamic knapsack
+# obj <- knapsack_dynamic()
+# obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 3500)
+
+#brute force knapsack 
+
+# btfObc <- brute_force_knapsack()
+# 
+# btfObc$bruteForceKnapsack(x = knapsack_objects[1:8,], w = 3500)
+# 
+# #greedy knapsack 
+# obj <- greedy_knapsack()
+# obj$greedyKnapSack(knapsack_objects[1:8,], 3000)
+
 ```

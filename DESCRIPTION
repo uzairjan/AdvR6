@@ -3,9 +3,8 @@ Title: Knapsack Problem
 Version: 1.0.0
 Author: group25
 Maintainer: Muhammad Uzair <muhammaduzair751@gmail.com>
-Description: This package includes three different functions for solving Knapsack Problem. 
-    Functions are based on different approaches that are "brute force", "dynamic programming" and "greedy heuristic". 
-    Each approach illustrates its own  computational complexity.
+Description: This package includes three different class for
+    solving Knapsack Problem brute force, dynamic programming greedy heuristic. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

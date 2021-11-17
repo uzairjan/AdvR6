@@ -4,17 +4,13 @@
 \name{knapsack_dynamic-class}
 \alias{knapsack_dynamic-class}
 \alias{knapsack_dynamic}
-\title{Dynamic Knapsack}
+\title{Knapsack dynamic}
 \arguments{
-\item{x}{Data frame weights and values}
+\item{df}{data frame}
 
-\item{W}{Total weight of the knapsack}
-}
-\value{
-maximum obtained value
+\item{W}{weight}
 }
 \description{
-This is a dynamic programming (DP) approach to solving knapsack problem.
-Here a tabulation method is used. DP approach results into better performance
+Knapsack dynamic
 }
 

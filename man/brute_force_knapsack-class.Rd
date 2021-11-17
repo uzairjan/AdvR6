@@ -6,9 +6,9 @@
 \alias{brute_force_knapsack}
 \title{Knapsack Algorithm - Brute Force}
 \arguments{
-\item{x}{data.frame with colnames 'v' & 'w'}
+\item{x}{data.frame with column names 'v' & 'w'}
 
-\item{W}{Knapsack Maximum Weight}
+\item{weight}{Knapsack Maximum Weight}
 
 \item{p}{Bool value to pass to active parallel}
 }
