@@ -31,7 +31,6 @@ greedy_knapsack <- setRefClass(
       ratio <- df[, "v"] / df[, "w"]
       ratio[order(ratio, decreasing = TRUE)]
       factors <- order(ratio, decreasing = TRUE)
-
       # putting into bag with maximum value
       greedyBag <- c()
       j <- 1
@@ -40,7 +39,6 @@ greedy_knapsack <- setRefClass(
         j <- j + 1
       }
       result <- list(value = round(sum(df[, "v"][factors[1:(j - 2)]]), digits = 0), factors = factors[1:(j - 2)])
-
       return(result)
     }
   )
