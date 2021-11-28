@@ -1,12 +1,15 @@
 
 
 #' Knapsack dynamic
-#' @param df data frame
-#' @param W weight
-#' @export
+#' \code{knapsack_dynamic} uses the dynamic programming.
+#'
+#' @param df an object of class data.frame with two variables v and w.
+#' @param W numeric scalar object that represents the knapsack size.
+#' @export knapsack_dynamic
 #' @exportClass knapsack_dynamic
 #'
 #' @importFrom utils combn
+#'
 knapsack_dynamic <- setRefClass(
   "knapsack_dynamic",
   methods = list(
@@ -25,6 +28,7 @@ knapsack_dynamic <- setRefClass(
       }
       factors <- c()
       nW <- W + 1
+
       for (j in (n + 1):2) {
         if (mz[j, nW] != mz[j - 1, nW]) {
           factors <- c(factors, j - 1)
@@ -36,3 +40,4 @@ knapsack_dynamic <- setRefClass(
     }
   )
 )
+# obj <- knapsack_dynamic()

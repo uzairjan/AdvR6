@@ -4,13 +4,15 @@
 \name{knapsack_dynamic-class}
 \alias{knapsack_dynamic-class}
 \alias{knapsack_dynamic}
-\title{Knapsack dynamic}
+\title{Knapsack dynamic
+\code{knapsack_dynamic} uses the dynamic programming.}
 \arguments{
-\item{df}{data frame}
+\item{df}{an object of class data.frame with two variables v and w.}
 
-\item{W}{weight}
+\item{W}{numeric scalar object that represents the knapsack size.}
 }
 \description{
 Knapsack dynamic
+\code{knapsack_dynamic} uses the dynamic programming.
 }
 

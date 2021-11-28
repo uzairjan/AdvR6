@@ -7,38 +7,100 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+## 1 Brute force search
+```{r include=FALSE}
+
 ```
 
-```{r echo=FALSE}
+```{r}
 
-#evtools::install_github("uzairjan/AdvR6")
 library(lab06)
 
-## basic example code
+set.seed(42,kind="Mersenne-Twister",normal.kind="Inversion")
+n<-2000
+knapsack_objects <- data.frame(w=sample(1:4000,size= n,replace=TRUE),
+                              v=runif(n= n,0,10000))
+ 
+brute_force_knapsack(x = knapsack_objects[1:8,],  W = 3500)
+brute_force_knapsack(x = knapsack_objects[1:12,], W = 3500)
+brute_force_knapsack(x = knapsack_objects[1:8,],  W = 2000)
+brute_force_knapsack(x = knapsack_objects[1:12,], W = 2000)
 
+getTime <- function(sample, FUNC){
+  time = system.time({for (i in 1:sample) FUNC})/2
+  return(time)
+}
 
-n <- 2000
-knapsack_objects <- data.frame(
-  w=sample(1:4000, size = n, replace = TRUE),
-  v=runif(n = n, 0, 10000)
+```
+## Question: How much time does it takes to run the algorithm for n = 16 objects?
+
+```{r}
+time <- getTime(2, brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500))
+ print("Observed times:")
+time
+```
+## Question: What performance gain could you get by parallelizing brute force search?
+```{r}
+para_time <- getTime(2, brute_force_knapsack(x = knapsack_objects[1:16,], W = 3500, p=TRUE))
+print("Observed times:")
+para_time
+```
+we can observe that the user time gets smaller with the system time is increased with same sample size
+
+## Dynamic programming
+
+# examples from dynamic programming
+
+```{r}
+obj <- lab06::knapsack_dynamic()
+
+obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 3500)
+obj$knapsackDynamic(df = knapsack_objects[1:12,], W = 3500)
+obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 2000)
+obj$knapsackDynamic(df = knapsack_objects[1:12,], W = 2000)
+```
+
+## Question: How much time does it takes to run the algorithm for n = 500 objects?
+
+```{r}
+obj <- lab06::knapsack_dynamic()
+d_time <- getTime(2, obj$knapsackDynamic(df = knapsack_objects[1:500,], W = 3500))
+d_time
+```
+## Greedy heuristic
+
+## examples:
+
+```{r}
+greedy_knapsack(x = knapsack_objects[1:800,], W = 3500)
+greedy_knapsack(x = knapsack_objects[1:1200,], W = 2000)
+```
+## Question: How much time does it take to run the algorithm for n = 1000000 objects?
+
+```{r}
+n <- 1000000
+knapsack_objects_1000000 <-
+data.frame(
+w=sample(1:4000, size = n, replace = TRUE),
+v=runif(n = n, 0, 10000)
 )
-# dynamic knapsack
-# obj <- knapsack_dynamic()
-# obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 3500)
 
-#brute force knapsack 
+g_time <- getTime(2,greedy_knapsack(x = knapsack_objects_1000000, W = 3500))
+print("Time for 1000000 Objects")
+g_time
+```
 
-# btfObc <- brute_force_knapsack()
-# 
-# btfObc$bruteForceKnapsack(x = knapsack_objects[1:8,], w = 3500)
-# 
-# #greedy knapsack 
-# obj <- greedy_knapsack()
-# obj$greedyKnapSack(knapsack_objects[1:8,], 3000)
+## Performance assessment and code optimization
 
+## Question: What performance gain could you get by trying to improve your code?
+
+**Tried to use While loop in place of using for loop to reduce time taken to create a list or vector compare to for loop. Optimizing our algorithm, we tried eliminate weight that is greater than the knapsack size. Created parallel version of this algorithm and divided problem into iterations and distributed iterations to the cores. Tried to replaced the loops for vectorization to possibly reduce execution time.**
+
+## For parallelize the brute programming
+
+ add parameter `p = T` 
+
+```{r, eval=F}
+brute_force_knapsack(x = knapsack_objects[1:8,], W = 3500, p = T)
+brute_force_knapsack(x = knapsack_objects[1:8,], W = 2000, p = T)
 ```
