@@ -2,7 +2,7 @@
 # lab06
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.com/uzairjan/AdvR6.svg?branch=main)](https://api.travis-ci.com/v3/job/547018288/log.txt)
+[![Travis build status](https://travis-ci.com/uzairjan/AdvR6.svg?branch=main)](https://app.travis-ci.com/github/uzairjan/AdvR6)
 <!-- badges: end -->
 
 The goal of lab06 is to ...
