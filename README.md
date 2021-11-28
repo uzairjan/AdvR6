@@ -36,12 +36,9 @@ obj$knapsackDynamic(df = knapsack_objects[1:8,], W = 3500)
 
 #brute force knapsack 
 
-btfObc <- brute_force_knapsack()
-
-btfObc$bruteForceKnapsack(x = knapsack_objects[1:8,], w = 3500)
+brute_force_knapsack(x = knapsack_objects[1:8,], w = 3500)
 
 #greedy knapsack 
-obj <- greedy_knapsack()
-obj$greedyKnapSack(knapsack_objects[1:8,], 3000)
+greedy_knapsack(knapsack_objects[1:8,], 3000)
 ```
 
